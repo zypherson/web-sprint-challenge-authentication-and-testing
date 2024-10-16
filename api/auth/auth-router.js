@@ -1,7 +1,14 @@
+/* eslint-disable no-unused-vars */
 const router = require('express').Router();
+const User = require('../users/users-model')
+const bcrypt = require('bcryptjs')
+const {checkUsernameFree} = require('./auth-middleware')
 
-router.post('/register', (req, res) => {
-  res.end('implement register, please!');
+
+
+
+router.post('/register', checkUsernameFree, async (req, res, next) => {
+  
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -27,7 +34,21 @@ router.post('/register', (req, res) => {
     4- On FAILED registration due to the `username` being taken,
       the response body should include a string exactly as follows: "username taken".
   */
+      try {
+        const { username, password } = req.body;
+        const newUser = await User.add({
+          username,
+          password: bcrypt.hashSync(password, 8),
+        });
+        res.status(201).json(newUser);
+      } catch (error) {
+        res.status(500).json({ message: error.message });
+      }
 });
+
+
+
+
 
 router.post('/login', (req, res) => {
   res.end('implement login, please!');
