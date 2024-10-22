@@ -9,7 +9,7 @@ const {JWT_SECRET} = require('../secrets')
 
 
 
-router.post('/register', checkUsernameFree, validateCredentials,  (req, res, next) => {
+router.post('/register',validateCredentials, checkUsernameFree,  (req, res, next) => {
   
   /*
     IMPLEMENT
@@ -57,7 +57,7 @@ User.add({username,password:hashedPassword})
 
 
 
-router.post('/login',checkUsernameExists, validateCredentials,(req, res,next) => {
+router.post('/login',validateCredentials,checkUsernameExists, (req, res,next) => {
   const {username,password} = req.body
   /*
     IMPLEMENT
